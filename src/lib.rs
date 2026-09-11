@@ -1,2 +1,3 @@
 pub mod command;
-pub mod contact;
+pub mod contacts;
+pub mod storage;
