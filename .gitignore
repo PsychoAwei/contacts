@@ -1,4 +1,4 @@
 /target
 # 通讯录数据，属于用户自己的数据，不该提交
 /contacts.json
-/contacts.json.tmp
+
