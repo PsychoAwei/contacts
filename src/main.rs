@@ -1,19 +1,22 @@
-pub mod cli;
+use contacts::cli;
 use contacts::command::Command;
 use std::env;
-use std::process;
+use std::process::ExitCode;
 
-fn main() {
-    let command = Command::parse(env::args());
-    let cmd = match command {
-        Ok(cmd) => cmd,
+fn main() -> ExitCode {
+    match run() {
+        Ok(()) => ExitCode::SUCCESS,
         Err(err) => {
-            println!("{err}");
-            process::exit(1);
+            // 诊断信息走 stderr。用 println! 的话,
+            // `contacts list > out.txt` 会把错误混进数据里。
+            eprintln!("错误: {err}");
+            ExitCode::FAILURE
         }
-    };
-    if let Err(err) = cli::run(cmd) {
-        println!("{err}");
-        process::exit(1);
     }
+}
+
+fn run() -> Result<(), Box<dyn std::error::Error>> {
+    let cmd = Command::parse(env::args().skip(1))?;
+    cli::run(cmd)?;
+    Ok(())
 }
